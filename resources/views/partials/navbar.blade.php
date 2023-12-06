@@ -14,12 +14,13 @@
                     <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('/products') ? 'active' : '' }}" href="/products">Produk</a>
+                    <a class="nav-link {{ Request::is('/post') ? 'active' : '' }}" href="/post">Posts</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto align-items-center gap-3">
                 @if(isset($answer))
                     @if($answer !== null)
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">

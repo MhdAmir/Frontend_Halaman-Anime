@@ -1,70 +1,59 @@
 @extends('layouts.main')
 
 @section('container')
+<h5 class="fw-semibold text-center fs-2">Postingan Halaman Anime</h5>
+<hr class="shadow-sm mt-4 mb-4">
+@if(isset($answer))
+<button type="button" class="btn btn-info fw-bold mb-5" data-mdb-ripple-init><a href="/post_store">+ Postingan</a></button>
+@endif
+@if (count($posts) > 0)
+<div class="row" style="place-self: stretch;">
+  @foreach ($posts as $post)
 
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form action="/posts" method="GET">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search..." name="search"
-                        value="{{ request('search') }}">
-                    <button class="btn btn-success" type="submit">Search</button>
-                </div>
-            </form>
+  <section class="border-bottom pb-4 mb-5">
+    <div class="row gx-5">
+      <div class="col-md-6 mb-4">
+        <div class="bg-image hover-overlay ripple shadow-2-strong rounded-5" data-mdb-ripple-color="light">
+          <img src="http://127.0.0.1/Halaman-Anime/public/api/image/{{ $post->image }}" class="img-fluid rounded" />
+          <a href="/post/{{ $post->id }}">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
         </div>
+      </div>
+
+      <div class="col-md-6 mb-5">
+
+        <span class="badge bg-danger px-2 py-1 shadow-1-strong mb-3">{{ $post->author->username }}</span>
+        <h4><strong>{{ $post->title }}</strong></h4>
+        <p class="text-muted">
+          {!! Str::limit($post->news_content, 200) !!}
+        </p>
+        <a href="/post/{{ $post->id }}">
+          <button type="button" class="btn btn-primary" href="/post/{{ $post->id }}">Read more</button>
+        </a>
+
+        @if(isset($answer))
+        @if($post->author_id === $answer['id'])
+        <div class="d-flex justify-content-between align-items-center mt-5">
+          <button type="button" class="btn btn-warning ps-3 pe-3">
+            <a href="/edit-post/{{ $post->id }}">Edit &nbsp;<i class="bi bi-pencil-square"></i></a>
+          </button>
+          <form method="POST" action="/post/{{ $post->id }}" onsubmit="return confirm('Ingin Menghapus Data Tersebut?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i>
+              Hapus</button>
+          </form>
+        </div>
+        @endif
+        @endif
+      </div>
     </div>
+  </section>
 
-    <!-- <div id="carouselExampleInterval" class="carousel slide rounded-3" data-bs-ride="carousel">
-        <div class="carousel-inner rounded-4">
-            <div class="carousel-item active" data-bs-interval="10000">
-                <img src="/img/carousell-1.jpg" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item" data-bs-interval="2000">
-                <img src="/img/carousell-2.jpg" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="/img/carousell-3.jpg" class="d-block w-100" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div> -->
-
-    <hr class="shadow-sm mt-4 mb-4">
-
-    {{-- <h5 class="fw-semibold">Tampil Produk</h5> --}}
-
-    @if (count($posts) > 0)
-        <div class="row">
-            @foreach ($posts as $post)
-                <div class="col-3">
-                    <div class="card mb-4 ">
-                        <div class="card-body">
-                        
-                            <img src="http://127.0.0.1/Halaman-Anime/public/api/image/{{ $post->image }}" alt=""
-                                style="width: 100%;">
-                            <h3 class="card-title">
-                                <a href="/post/{{ $post->id }}">{{ $post->title }}</a>
-                            </h3>
-
-                            <h6 class="card-subtitle mb-2 text-body-secondary">
-                                By: <a href="#">{{ $post->author->username }}</a>
-                            </h6>
-
-                            <p class="card-text">{!! $post->news_content !!}</p> 
-                            <a href="#" class="card-link">Read more...</a>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @else
-        <p class="text-center fs-4">Produk tidak ditemukan!</p>
-    @endif
+  @endforeach
+</div>
+@else
+<p class="text-center fs-4">Post tidak ditemukan!</p>
+@endif
 @endsection

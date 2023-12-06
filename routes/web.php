@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,15 +16,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home', [
-        "title" => "Home"
-    ]);
-});
+Route::get('/', [PostController::class, 'home']);
 
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/register', [AuthController::class, 'indexr']);
 Route::get('/login', [AuthController::class, 'index'])->name('Authentication')->middleware('guest');
-Route::get('/post', [PostController::class, 'index']);
-Route::get('/post/{post:id}', [PostController::class, 'show']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
-Route::get('/try', [AuthController::class, 'try']);
+Route::get('/post', [PostController::class, 'index']);
+Route::post('/post', [PostController::class, 'store']);
+Route::get('/edit-post/{post:id}', [PostController::class, 'showEdit']);
+
+Route::get('/post/{post:id}', [PostController::class, 'show']);
+Route::get('/posts/{user:username}', [PostController::class, 'showByUser']);
+Route::get('/post_store', [PostController::class, 'index_store']);
+
+Route::patch('/post/{post:id}', [PostController::class, 'update']);
+Route::delete('/post/{post:id}', [PostController::class, 'destroy']);
+Route::post('/comment', [CommentController::class, 'store'])->name('Comment');
